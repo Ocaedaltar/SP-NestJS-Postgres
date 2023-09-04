@@ -1,3 +1,4 @@
+PROJECT_NAME="test_template"
 
 # --  Color   -- #
 _CYAN  = \033[36m
@@ -32,7 +33,7 @@ fclean: clean
 .PHONY: enter-back
 enter-back:
 	@echo "$(_CYAN) Tu es $(_GREEN)Entrer$(_CYAN) dans le container du BackEnd $(_ENDL)"
-	@docker exec -it back sh
+	@docker exec -it ${PROJECT_NAME}_api sh
 	@echo "$(_CYAN) Tu es $(_RED)Sorti$(_CYAN) le container du BackEnd $(_ENDL)"
 
 .PHONY: enter-db
@@ -44,7 +45,7 @@ enter-db:
 .PHONY: enter-front
 enter-front:
 	@echo "$(_CYAN) Tu es $(_GREEN)Entrer$(_CYAN) dans le container du FrontEnd $(_ENDL)"
-	@docker exec -it front sh
+	@docker exec -it ${PROJECT_NAME}_client sh
 	@echo "$(_CYAN) Tu es $(_RED)Sorti$(_CYAN) le container du FrontEnd $(_ENDL)"
 
 # SHORTCUT 
@@ -53,7 +54,7 @@ enter-front:
 
 .PHONY: log-back
 log-back:
-	@docker logs back -f
+	@docker logs ${PROJECT_NAME}_api -f
 
 .PHONY: log-db
 log-db:
@@ -61,4 +62,4 @@ log-db:
 
 .PHONY: log-front
 log-front:
-	@docker logs front -f
+	@docker logs ${PROJECT_NAME}_client -f

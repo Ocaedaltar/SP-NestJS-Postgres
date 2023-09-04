@@ -13,24 +13,24 @@ services:
     networks:
       - postgres_network
 
-  nginx:
-    image: nginx:latest
-    restart: always
-    environment:
-      NGINX_PORT: ${NGINX_PORT}
-    volumes:
-      - ./configuration/nginx.conf:/etc/nginx/conf.d/default.conf
-    ports:
-      - "${NGINX_PORT}:${NGINX_PORT}"
-    depends_on:
-      - api
+  # nginx:
+  #   image: nginx:latest
+  #   restart: always
+  #   environment:
+  #     NGINX_PORT: ${NGINX_PORT}
+  #   volumes:
+  #     - ./configuration/nginx.conf:/etc/nginx/conf.d/default.conf
+  #   ports:
+  #     - "${NGINX_PORT}:${NGINX_PORT}"
+  #   depends_on:
+  #     - api
 
   api:
     container_name: ${PROJECT_NAME}_api
     image: ${PROJECT_NAME}-api-prod
     restart: unless-stopped
     build:
-      context: back
+      context: configuration/back
       dockerfile: Dockerfile
     environment:
       BACK_PORT: ${BACK_PORT}
@@ -54,7 +54,7 @@ services:
     image: ${PROJECT_NAME}-client-prod
     restart: unless-stopped
     build:
-      context: front
+      context: configuration/front
       dockerfile: Dockerfile
     environment:
       VITE_API: ${API}
