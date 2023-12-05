@@ -21,8 +21,8 @@ WORKDIR /app
 COPY ./package.json ./package.json
 COPY ./package-lock.json ./package-lock.json
 
-# Si besoin autre chose -> 
-# ex: Configuration de Prisma 
+# Si besoin autre chose ->
+# ex: Configuration de Prisma
 
 RUN npm install
 
@@ -30,4 +30,5 @@ RUN npm install
 #   Lancement de l'application  #
 # ----------------------------- #
 CMD ["npm", "run", "start:dev"]
+# CMD ["tail", "-f"]
 # ----------------------------- #

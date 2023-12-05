@@ -2,6 +2,7 @@ version: "3.8"
 
 services:
   database:
+    container_name: db_api
     image: postgres:latest
     restart: always
     environment:
@@ -9,28 +10,51 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
-      - postgres_data:/var/lib/posgresql/data
+      - postgres_data:/var/lib/postgresql/db
     networks:
       - postgres_network
+    ports:
+      - 5432:5432
 
-  # nginx:
-  #   image: nginx:latest
-  #   restart: always
-  #   environment:
-  #     NGINX_PORT: ${NGINX_PORT}
-  #   volumes:
-  #     - ./configuration/nginx.conf:/etc/nginx/conf.d/default.conf
-  #   ports:
-  #     - "${NGINX_PORT}:${NGINX_PORT}"
-  #   depends_on:
-  #     - api
+  dataAuth:
+    container_name: db_auth
+    image: postgres:latest
+    volumes:
+      - postgres_auth:/var/lib/postgresql/auth
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: password
+    networks:
+      - keycloak_network
+    ports:
+      - 5436:5432
+
+  keycloak:
+    image: quay.io/keycloak/keycloak
+    command: start-dev
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: postgres
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_SCHEMA: public
+      DB_PASSWORD: password
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: Pa55w0rd
+    ports:
+      - 4444:8080
+    depends_on:
+      - dataAuth
+    networks:
+      - keycloak_network
 
   api:
     container_name: ${PROJECT_NAME}_api
     image: ${PROJECT_NAME}-api-prod
     restart: unless-stopped
     build:
-      context: back
+      context: services/api
       dockerfile: Dockerfile
     environment:
       BACK_PORT: ${BACK_PORT}
@@ -42,36 +66,39 @@ services:
       SWAGGER: ${SWAGGER}
     ports:
       - "${BACK_PORT}:${BACK_PORT}"
-      # - "5555:5555"
     volumes:
-      - "./back:/app"
+      - "./services/api:/app"
     networks:
       - postgres_network
     depends_on:
       - database
 
-  client:
-    container_name: ${PROJECT_NAME}_client
-    image: ${PROJECT_NAME}-client-prod
-    restart: unless-stopped
-    build:
-      context: configuration/front
-      dockerfile: Dockerfile
-    environment:
-      VITE_API: ${API}
-    ports:
-      - "${FRONT_PORT}:${FRONT_PORT}"
-    volumes:
-      - "./front:/app"
-    networks:
-      - postgres_network
-    depends_on:
-      - api
+  # client:
+  #   container_name: ${PROJECT_NAME}_client
+  #   image: ${PROJECT_NAME}-client-prod
+  #   restart: unless-stopped
+  #   build:
+  #     context: services/front
+  #     dockerfile: Dockerfile
+  #   environment:
+  #     VITE_API: ${API}
+  #   ports:
+  #     - "${FRONT_PORT}:${FRONT_PORT}"
+  #   volumes:
+  #     - "./front:/app"
+  #   networks:
+  #     - postgres_network
+  #   depends_on:
+  #     - api
 
 networks:
   postgres_network:
     driver: bridge
+  keycloak_network:
+    driver: bridge
 
 volumes:
   postgres_data:
+    driver: local
+  postgres_auth:
     driver: local
