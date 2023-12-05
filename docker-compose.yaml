@@ -12,7 +12,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/db
     networks:
-      - postgres_network
+      - data_network
     ports:
       - 5432:5432
 
@@ -51,7 +51,7 @@ services:
 
   api:
     container_name: ${PROJECT_NAME}_api
-    image: ${PROJECT_NAME}-api-prod
+    image: ${PROJECT_NAME}-api-dev
     restart: unless-stopped
     build:
       context: services/api
@@ -69,30 +69,30 @@ services:
     volumes:
       - "./services/api:/app"
     networks:
-      - postgres_network
+      - data_network
     depends_on:
       - database
 
-  # client:
-  #   container_name: ${PROJECT_NAME}_client
-  #   image: ${PROJECT_NAME}-client-prod
-  #   restart: unless-stopped
-  #   build:
-  #     context: services/front
-  #     dockerfile: Dockerfile
-  #   environment:
-  #     VITE_API: ${API}
-  #   ports:
-  #     - "${FRONT_PORT}:${FRONT_PORT}"
-  #   volumes:
-  #     - "./front:/app"
-  #   networks:
-  #     - postgres_network
-  #   depends_on:
-  #     - api
+  client:
+    container_name: ${PROJECT_NAME}_client
+    image: ${PROJECT_NAME}-client-dev
+    restart: unless-stopped
+    build:
+      context: services/client
+      dockerfile: Dockerfile
+    environment:
+      VITE_API: ${API}
+      VITE_HOST: ${FRONT_HOST}
+      VITE_PORT: ${FRONT_PORT}
+    ports:
+      - "${FRONT_PORT}:${FRONT_PORT}"
+    volumes:
+      - "./services/client:/app"
+    depends_on:
+      - api
 
 networks:
-  postgres_network:
+  data_network:
     driver: bridge
   keycloak_network:
     driver: bridge
