@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   database:
-    container_name: db_api
+    container_name: ${DB_NAME}
     image: postgres:latest
     restart: always
     environment:
@@ -10,44 +10,9 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
-      - postgres_data:/var/lib/postgresql/db
+      - postgres_data:/var/lib/postgresql/${DB_NAME}
     networks:
       - data_network
-    ports:
-      - 5432:5432
-
-  dataAuth:
-    container_name: db_auth
-    image: postgres:latest
-    volumes:
-      - postgres_auth:/var/lib/postgresql/auth
-    environment:
-      POSTGRES_DB: keycloak
-      POSTGRES_USER: keycloak
-      POSTGRES_PASSWORD: password
-    networks:
-      - keycloak_network
-    ports:
-      - 5436:5432
-
-  keycloak:
-    image: quay.io/keycloak/keycloak
-    command: start-dev
-    environment:
-      DB_VENDOR: POSTGRES
-      DB_ADDR: postgres
-      DB_DATABASE: keycloak
-      DB_USER: keycloak
-      DB_SCHEMA: public
-      DB_PASSWORD: password
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: Pa55w0rd
-    ports:
-      - 4444:8080
-    depends_on:
-      - dataAuth
-    networks:
-      - keycloak_network
 
   api:
     container_name: ${PROJECT_NAME}_api
@@ -66,6 +31,7 @@ services:
       SWAGGER: ${SWAGGER}
     ports:
       - "${BACK_PORT}:${BACK_PORT}"
+      - "5555:5555"
     volumes:
       - "./services/api:/app"
     networks:
@@ -94,11 +60,7 @@ services:
 networks:
   data_network:
     driver: bridge
-  keycloak_network:
-    driver: bridge
 
 volumes:
   postgres_data:
-    driver: local
-  postgres_auth:
     driver: local
