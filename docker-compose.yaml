@@ -31,7 +31,7 @@ services:
       SWAGGER: ${SWAGGER}
     ports:
       - "${BACK_PORT}:${BACK_PORT}"
-      - "5555:5555"
+      - "5555:5555" # REMOVE FOR THE CORRECTION
     volumes:
       - "./services/api:/app"
     networks:
