@@ -23,6 +23,8 @@ COPY ./package.json ./package.json
 # Si besoin autre chose ->
 # ex: Configuration de Prisma
 
+
+
 RUN npm install
 
 # ----------------------------- #
