@@ -6,7 +6,6 @@ WORKDIR /app
 #   Installation dependencies   #
 # ----------------------------- #
 COPY ./package.json ./package.json
-COPY ./package-lock.json ./package-lock.json
 
 # Si besoin autre chose ->
 # ex: Configuration de Prisma
