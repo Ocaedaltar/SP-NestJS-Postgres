@@ -40,7 +40,8 @@ Un Makefile est à votre disposition avec les commandes nécessaires pour une pr
 
 Swagger est une spécification pour décrire les API RESTful. Dans ce starter pack, Swagger est intégré pour générer une documentation interactive de l'API.
 
-La documentation Swagger est accessible à l'URL suivante : [Documentation Swagger](lien_vers_la_documentation)
+- [Documentation Personalisée Swagger](./Documentation/SWAGGER.md)
+- [Documentation Officiel Swagger](https://docs.nestjs.com/openapi/introduction)
 
 Pour accéder à l'interface utilisateur Swagger (UI), suivez ces étapes :
 1. Lancez votre application Nest JS.
@@ -62,7 +63,7 @@ Pour générer du code TypeScript basé sur votre schéma de base de données et
 - **npx prisma studio**: Lance Prisma Studio, une interface de gestion visuelle pour votre base de données.
 
 
-Pour en savoir plus sur Prisma et comment l'utiliser, consultez la [documentation officielle de Prisma](lien_vers_la_documentation).
+Pour en savoir plus sur Prisma et comment l'utiliser, consultez: 
 
-
-<!-- todo : prisma seed exemple + setings -->
+- [documentation Personalisee de Prisma](./Documentation/PRISMA.md)
+- [documentation Officiel de Prisma](https://docs.nestjs.com/recipes/prisma)
