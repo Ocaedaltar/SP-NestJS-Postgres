@@ -28,6 +28,8 @@ RUN npm install
 # ----------------------------- #
 #   Lancement de l'application  #
 # ----------------------------- #
-CMD ["npm", "run", "start:dev"]
+CMD npx prisma db push      \
+    && npx prisma db seed   \
+    && npm run start:dev
 # CMD ["tail", "-f"]
 # ----------------------------- #
