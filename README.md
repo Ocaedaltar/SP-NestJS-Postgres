@@ -1,4 +1,4 @@
-# Nom du Projet
+# SP-NestJS-Postgres
 
 Starter Pack pour des applications web utilisant Nest JS et PostgreSQL.
 
