@@ -62,7 +62,6 @@ Pour générer du code TypeScript basé sur votre schéma de base de données et
 - **npx prisma ${DB_NAME} seed**: Exécute les scripts de semences définis dans votre configuration Prisma pour remplir votre base de données avec des données initiales.
 - **npx prisma studio**: Lance Prisma Studio, une interface de gestion visuelle pour votre base de données.
 
-
 Pour en savoir plus sur Prisma et comment l'utiliser, consultez: 
 
 - [documentation Personalisee de Prisma](./Documentation/PRISMA.md)
